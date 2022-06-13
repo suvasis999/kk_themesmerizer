@@ -1,6 +1,7 @@
 import React, { useState, useEffect,useRef} from "react";
 import { GetServerSideProps, GetStaticProps } from "next";
 import { Box} from "@chakra-ui/layout";
+import { BASE_URL } from "../service/BaseURL";
 import { Button, Modal,
   ModalOverlay,
   ModalContent,
@@ -112,7 +113,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
   const onSubmit=async(values)=> {
    if(files==null){
     console.log('data is '+files);
-    fetch('http://localhost:1337/api/posts', {
+    fetch(BASE_URL, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({'data':values})
@@ -129,7 +130,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
     const formData = new FormData()
     formData.append('files', files);
     console.log(values);
-     axios.post("http://localhost:1337/api/upload", formData)
+     axios.post(BASE_URL, formData)
     .then((response)=>{
 
       const imageId = response.data[0].id;
@@ -145,7 +146,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
           "slug":  values.title
        
       };
-       fetch('http://localhost:1337/api/posts', {
+       fetch(BASE_URL, {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({'data':postVal})
