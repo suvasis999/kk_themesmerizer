@@ -27,6 +27,10 @@ const SingleCard = (props: PostCardProps) => {
         </div>
          {props.postD.attributes.cover.data==null?
          <div className={styles.content_wIMGSingle}>
+           <div style={{fontSize:"12px",
+        color:'rgb(109 105 105)',fontStyle:'italic',right:'70px',bottom: '100px'}}>
+          Tribute By : ({props.postD.attributes.name})</div>
+        
          {props.postD.attributes.title ==''?'': <h1 style={{marginBottom:'10px',fontWeight:"bold",fontSize:"1em",
        whiteSpace:"pre-line"}}>{props.postD.attributes.title}</h1>}
            <div   style={{color:'#000',fontSize:"1em",whiteSpace:"pre-line"}}>
@@ -39,17 +43,18 @@ const SingleCard = (props: PostCardProps) => {
            <div className={styles.contentModal}>
            <img src={IMAGE_URL+ props.postD.attributes.cover.data.attributes.url} 
          height='300px' width='400px' style={{float:'left',paddingRight:'40px'}}/>
+          <div style={{fontSize:"12px",
+        color:'rgb(109 105 105)',fontStyle:'italic',right:'70px',bottom: '100px'}}>Tribute By : ({props.postD.attributes.name})</div>
+        
           {props.postD.title ==''?'': <h1 style={{marginBottom:'10px',fontWeight:"bold",fontSize:"1em",
-        whiteSpace:"pre-line"}}>{props.postD.title}dfdf</h1>}
+        whiteSpace:"pre-line"}}>{props.postD.title}</h1>}
             <span   style={{color:'#000',fontSize:"1em",whiteSpace:"pre-line"}}>
             {props.postD.attributes.message}</span>
           </div>
           </div>}
       
       </Box>
-      <span style={{position:'absolute',zIndex:2,textAlign:'right',fontSize:"12px",
-        color:'rgb(205 204 204)',fontStyle:'italic',right:'70px',bottom: '100px'}}>({props.postD.attributes.name})</span>
-        
+      
     </>
   );
 };

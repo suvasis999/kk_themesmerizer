@@ -190,7 +190,14 @@
     color: #a19696;
     width: 100%;
     padding: 40px 10px 40px 10px;
+    background-color: #ffffff;
+}
+
+.content_wIMGSingle2 {
+    color: #a19696;
+    width: 100%;
     text-align: center;
+    padding: 40px 10px 40px 10px;
     background-color: #ffffff;
 }
 

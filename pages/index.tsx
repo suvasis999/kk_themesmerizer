@@ -21,9 +21,13 @@ import "./Home.module.css";
 import styles from "../styles/Home.module.css";
 import { AddIcon} from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
-import { FetchData,PostData,FetchDataByid} from '../service/MemoAPI';
+import { FetchData,PostData,FetchDataByid,FetchTeammsg} from '../service/MemoAPI';
 import CarouselPage from "../components/Carousel";
 import SingleCard from "../components/singleCard";
+import TeamMessage from "../components/teamMessage";
+import Header from "../components/header";
+import ReCaptchaV2 from 'react-google-recaptcha';
+
 
 
 const breakpointColumnsObj = {
@@ -39,26 +43,35 @@ const breakpointColumnsObj = {
 const IndexView = ({ data }: PostJsonResponse) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [postDta, setpostDta] = useState([]);
-   const [showModal, setshowModal] = useState(false);
+  const [showModal, setshowModal] = useState(false);
   const [Spost, setSpost] = useState([]);
   const [files,setFiles] = useState<File | null>(null);
   const fileRef = useRef(null);
+  const recaptchaRef = useRef(null)
   const [showMedia, setshowMedia] = useState(false);
   const [media, setmedia] = useState('');
- 
-   
+  const [teamDta,setteamDta]=useState([]);
+  const [disableSubmit,setDisableSubmit] = useState(true);
   useEffect(() => {
     postData();
+    teamMsgData();
+    console.log(typeof(Spost));
     console.log(Spost);
-  console.log(typeof(Spost));
-  console.log(Spost);
-  }, [Spost]);
+    }, [Spost]);
 
+ 
   const postData=async()=>{
     const response = await FetchData();
     setpostDta(response.data.data); 
-
   }
+
+  const teamMsgData=async()=>{
+    const response = await FetchTeammsg();
+    setteamDta(response.data.data);
+}
+
+ 
+
 
   const toPostView = async(id: number)=>{
     const response = await FetchDataByid(id);
@@ -67,18 +80,11 @@ const IndexView = ({ data }: PostJsonResponse) => {
    }
 
    const toMediaView=(data)=>{
-    console.log(data);
-    setmedia(data);
+   setmedia(data);
     setshowMedia(true);
    }
 
-
-  const Singleposts = (data) => {
-    return(
-    <SingleCard postD={data}/>
-    )
-  };
-
+ 
   const closePostModal=()=>{
     setshowModal(false);
     setshowMedia(false);
@@ -110,6 +116,18 @@ const IndexView = ({ data }: PostJsonResponse) => {
       playVdo={()=>toMediaView(post.attributes.vdolink)}
     />
   ));
+
+  const teamMsg = teamDta.map((post) => (
+    
+    <TeamMessage
+      key={post.id}
+      message={post.attributes.message}
+      postImage={post.attributes.coverimg.data==null?null:post.attributes.coverimg.data.attributes.url}
+      
+    />
+  ));
+
+
   const onSubmit=async(values)=> {
    if(files==null){
     console.log('data is '+files);
@@ -165,6 +183,8 @@ const IndexView = ({ data }: PostJsonResponse) => {
     })
   }
 
+ 
+
 
      return new Promise<void>( (resolve) => {
      
@@ -176,15 +196,19 @@ const IndexView = ({ data }: PostJsonResponse) => {
       }, 2000)
     })
   }
-
+  const onChangeCaptch=(value)=>{
+    setDisableSubmit(false);
+    console.log("Captcha value:", value);
+  }
 
   return (
       <>
-      
+     
      <div style={{margin:'0px 0px 30px 0px'}}>
+      <Header openModal={onOpen}/>
      <div>
-     <CarouselPage/>
-   </div>
+      <CarouselPage/>
+     </div>
    
      <div style={{ 
     backgroundColor: '#314963',
@@ -217,19 +241,30 @@ const IndexView = ({ data }: PostJsonResponse) => {
         In Loving Memory of KK 
         
         </Box>
+        <div
+         style={{
+        fontFamily:'cursive',marginBottom:"30px",marginTop:"0px",
+        color: '#fff',
+        textAlign:'center',
+        fontSize: '30px',float:'left',padding:'30px 5%'}}
+      >
+         {teamMsg}
         
-      <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className={styles.my_masonry_grid}
-      columnClassName={styles.my_masonry_grid_column} 
-    >
-       {posts}
-    </Masonry>
+        </div>
+        <div>
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className={styles.my_masonry_grid}
+            columnClassName={styles.my_masonry_grid_column} 
+            >
+              {posts}
+          </Masonry>
+        </div>
     </div>
 
-    <Modal isOpen={isOpen} onClose={closeModal}>
+    <Modal isOpen={isOpen} onClose={closeModal} size={'full'} >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent style={{marginTop:'0px',margin: '30px 15%'}}>
           <ModalHeader>Create Post</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -320,7 +355,11 @@ const IndexView = ({ data }: PostJsonResponse) => {
                   {errors.msg && errors.msg.message}
                 </FormErrorMessage>
               </FormControl>
-               <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
+              <ReCaptchaV2 
+              sitekey={'6Lejs20gAAAAACNocQ0cu_wc3dlJcXT208Do02Vn'} 
+               onChange={onChangeCaptch}/>
+               <Button mt={4} colorScheme='teal' isLoading={isSubmitting} 
+               type='submit' style={{width:'100%'}} disabled={disableSubmit}>
                 Submit
               </Button>
             </form>
@@ -335,7 +374,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
       
       >
       <ModalOverlay />
-        <ModalContent style={{marginTop:'0px'}}>
+        <ModalContent style={{marginTop:'0px',margin: '30px'}}>
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>

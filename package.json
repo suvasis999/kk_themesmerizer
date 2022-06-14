@@ -17,6 +17,9 @@
         "next": "10.1.3",
         "react": "17.0.2",
         "react-dom": "17.0.2",
+        "react-form-base": "^1.7.1",
+        "react-google-recaptcha": "^2.1.0",
+        "react-google-recaptcha-v3": "^1.9.8",
         "react-hook-form": "^7.31.3",
         "react-masonry-css": "^1.0.16",
         "react-responsive-carousel": "^3.2.23"

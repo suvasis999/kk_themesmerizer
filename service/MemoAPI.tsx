@@ -13,6 +13,11 @@ export const FetchData = async () => {
    return res;
 };
 
+export const FetchTeammsg = async () => {
+  let res = await axios.get(BASE_URL + `/teammsgs?populate=*`);
+  return res;
+};
+
 export const FetchDataByid = async (id) => {
   let res = await axios.get(BASE_URL + `/posts/`+id+`?populate=*`);
   
