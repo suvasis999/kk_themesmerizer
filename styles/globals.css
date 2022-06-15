@@ -1,3 +1,20 @@
+@font-face {
+    font-family: "RRegular";
+    src: url("/fonts/Rubik.ttf");
+}
+
+@font-face {
+    font-family: "testFont";
+    src: url("/fonts/Montserrat.ttf");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "overLockFontBlack";
+    src: url("/fonts/Overlock-Regular.ttf");
+    font-style: normal;
+}
+
 html,
 body {
     padding: 0;

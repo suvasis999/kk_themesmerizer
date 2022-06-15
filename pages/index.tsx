@@ -11,7 +11,7 @@ import { Button, Modal,
   ModalCloseButton,useDisclosure,FormErrorMessage,
   FormLabel,
   FormControl,
-  Input,Grid, GridItem,Textarea ,AspectRatio,Spinner   } from '@chakra-ui/react'
+  Input,Grid, GridItem,Textarea ,AspectRatio,Spinner,Divider    } from '@chakra-ui/react'
 import { useRouter } from "next/router";
 import axios from "axios";
 import PostCard from "../components/PostCard";
@@ -27,6 +27,7 @@ import SingleCard from "../components/singleCard";
 import TeamMessage from "../components/teamMessage";
 import Header from "../components/header";
 import ReCaptchaV2 from 'react-google-recaptcha';
+
 
 
 
@@ -52,6 +53,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
   const [media, setmedia] = useState('');
   const [teamDta,setteamDta]=useState([]);
   const [disableSubmit,setDisableSubmit] = useState(true);
+  const [showMore,setshowMore]=useState(true);
   useEffect(() => {
     postData();
     teamMsgData();
@@ -223,35 +225,42 @@ const IndexView = ({ data }: PostJsonResponse) => {
   height='80px' width='80px' color='white' fontSize='40px'
    onClick={onOpen} style={{marginTop:'-6px'}}><AddIcon /></Box></div>
    
-     <Box
-         shadow="lg"
-        borderRadius="md"
-        marginBottom="30px"
-        marginTop="0px"
-        padding={4}
-        w="100%"
-        mx="auto"
-        style={{ border:'1px solid rgb(221, 221, 221)',
-        fontFamily:'cursive',
-        backgroundColor: 'hsl(224deg 30% 75%)',
-        color: '#fff',
-        textAlign:'center',
-        fontSize: '30px'}}
-      >
-        In Loving Memory of KK 
-        
-        </Box>
+     
         <div
          style={{
         fontFamily:'cursive',marginBottom:"30px",marginTop:"0px",
         color: '#fff',
         textAlign:'center',
-        fontSize: '30px',float:'left',padding:'30px 5%'}}
+        fontSize: '30px',padding:'30px 5%'}}
       >
          {teamMsg}
-        
+       
+        </div>
+        <div style={{padding:'0px 10%'}}>
+        <Divider orientation='horizontal' />
         </div>
         <div>
+        <Box
+         shadow="md"
+       
+        marginBottom="30px"
+        marginTop="0px"
+        padding={4}
+        w="100%"
+        mx="auto"
+        style={{
+        fontFamily:'RRegular',
+        color: 'rgb(49 73 99)',
+        textAlign:'center',
+        fontSize: '30px',borderTop:'1px solid #dddddd54'}}
+      >
+        Tributes By Fans & Friends
+        
+        </Box>
+        </div>
+       
+        <div>
+        
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className={styles.my_masonry_grid}
@@ -259,6 +268,17 @@ const IndexView = ({ data }: PostJsonResponse) => {
             >
               {posts}
           </Masonry>
+        </div>
+        <div style={{textAlign:'center'}}>
+       
+          {/*<Button isLoading={showMore}
+          variant="outline"
+          style={{backgroundColor:'#cc9900', borderColor: "#cc9900",width:'30%'}}
+          _hover={{ bg: "#cc9900", borderColor: "#cc9900" }}
+          disabled={false}
+        >
+         Show More
+         </Button>*/}
         </div>
     </div>
 

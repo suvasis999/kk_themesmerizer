@@ -24,7 +24,7 @@ const PostCard = ({ title,name, publishedAt, onClick,playVdo,postImage,content,v
         padding={0}
         w="100%"
         mx="auto"
-        style={{border: '1px solid #ddd',fontFamily: 'cursive',
+        style={{border: '1px solid #ddd',fontFamily: 'RRegular',
         position: 'relative',cursor:'pointer' }}
       >
         <div >
@@ -36,29 +36,33 @@ const PostCard = ({ title,name, publishedAt, onClick,playVdo,postImage,content,v
           />
          }
           <span style={{position:'absolute',zIndex:2,textAlign:'right',fontSize:"12px",
-        color:'#666',fontStyle:'italic',right:'10px',top: '10px'}}>{new Date(publishedAt).toLocaleDateString()}</span>
+        color:'#666',fontStyle:'italic',right:'10px',top: '10px'}}>{new Date(publishedAt).toLocaleDateString('en-GB', {
+          month: '2-digit',day: '2-digit',year: 'numeric'})}</span>
         <span style={{position:'absolute',zIndex:2,textAlign:'right',fontSize:"12px",
         color:'#fff',fontStyle:'italic',right:'10px',bottom: '10px'}}>{name}</span>
         
         </div>
          {postImage==null?
-         <div className={styles.content_wIMG} onClick={onClick}>
+         
+         <div style={{position: 'relative'}} onClick={onClick}>
+           <img src='./default.jpg' height='300px' width='100%'/>
+           <div className={styles.content}>
          {title ==''?'': <h1 style={{marginBottom:'10px',fontWeight:"bold",fontSize:"1em",
        whiteSpace:"pre-line"}}>{title}</h1>}
-           <div   style={{color:'#777',fontSize:"1em",whiteSpace:"pre-line"}}>
+           <div   style={{color:'rgb(221 220 220)',fontSize:"1em",whiteSpace:"pre-line"}}>
            {content.length>50?content.substring(0, 50):content}
-           <span  onClick={onClick} className={styles.linkColorBlack}>{content.length>50?'...Read More':''}</span>
+           <span  onClick={onClick} className={styles.linkColorBlack}>{content.length>50?'... Read More':''}</span>
           </div>
-         </div>
+         </div></div>
          :
          <div style={{position: 'relative'}} onClick={onClick}>
-         <img src={IMAGE_URL+ postImage} height='300px' width='400px'/>
+         <img src={IMAGE_URL+ postImage} height='300px' width='100%'/>
            <div className={styles.content}>
           {title ==''?'': <h1 style={{marginBottom:'10px',fontWeight:"bold",fontSize:"1em",
         whiteSpace:"pre-line"}}>{title}</h1>}
             <div   style={{color:'rgb(221 220 220)',fontSize:"1em",whiteSpace:"pre-line"}}>
             {content.length>50?content.substring(0, 50):content}
-            <span  onClick={onClick} className={styles.linkColor}>{content.length>50?'...Read More':''}</span>
+            <span  onClick={onClick} className={styles.linkColor}>{content.length>50?'... Read More':''}</span>
            </div>
           </div>
           </div>}

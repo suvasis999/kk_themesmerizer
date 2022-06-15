@@ -18,7 +18,8 @@ const TeamMessage = (props: TeamMsgProps) => {
          {props.postImage==null?
          <div className={styles.content_wIMGSingle2}>
          
-           <div   style={{color:'#000',fontSize:"14px",whiteSpace:"pre-line"}}>
+           <div   style={{color:'#000',fontSize:"14px",whiteSpace:"pre-line",
+          fontFamily:'RRegular'}}>
            {props.message}
            </div>
          </div>
@@ -37,7 +38,8 @@ const TeamMessage = (props: TeamMsgProps) => {
          height='300px' width='400px' style={{float:'left',paddingRight:'40px'}}/>
          */}
           
-            <span   style={{color:'#000',fontSize:"14px",whiteSpace:"pre-line",padding:'30px'}}>
+            <span   style={{color:'#000',fontSize:"14px",whiteSpace:"pre-line",padding:'30px',
+          fontFamily:'RRegular'}}>
             {props.message}</span>
           </div>
   </div>}
