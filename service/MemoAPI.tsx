@@ -7,8 +7,8 @@ const headers = {
 };
 
 // ---------------- Register & Login APIs -----------------
-export const FetchData = async () => {
-  let res = await axios.get(BASE_URL + `/posts?populate=*`);
+export const FetchData = async (st,lmt) => {
+  let res = await axios.get(BASE_URL + `/posts?pagination[start]=`+st+`&pagination[limit]=`+lmt+`&populate=*`);
   
    return res;
 };

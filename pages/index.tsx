@@ -53,7 +53,10 @@ const IndexView = ({ data }: PostJsonResponse) => {
   const [media, setmedia] = useState('');
   const [teamDta,setteamDta]=useState([]);
   const [disableSubmit,setDisableSubmit] = useState(true);
-  const [showMore,setshowMore]=useState(true);
+  const [showMore,setshowMore]=useState(false);
+  const [start,setstart]=useState(0);
+  const [lmt,setlmt]=useState(10);
+  const [disSh,setdisSh]=useState(false);
   useEffect(() => {
     postData();
     teamMsgData();
@@ -63,8 +66,17 @@ const IndexView = ({ data }: PostJsonResponse) => {
 
  
   const postData=async()=>{
-    const response = await FetchData();
-    setpostDta(response.data.data); 
+    const response = await FetchData(start,lmt);
+    //const PostRecord = [...postDta, ...response.data.data];
+    if(postDta.length>0){
+      setpostDta(response.data.data); 
+    }
+    else{
+      setpostDta(response.data.data);
+    }
+   
+   // setpostDta([...postDta,response.data.data]); 
+   //setpostDta(response.data.data); 
   }
 
   const teamMsgData=async()=>{
@@ -72,7 +84,28 @@ const IndexView = ({ data }: PostJsonResponse) => {
     setteamDta(response.data.data);
 }
 
+ const loadmore=async()=>{
+  const response = await FetchData(start+lmt,lmt);
+  console.log(response.data.data.length);
+ if(response.data.data.length==0){
+  setdisSh(true);
+  setstart(start);
+ }
+ else{
+  setdisSh(false);
+  setshowMore(true);
+  setstart(start+lmt);
+  
+  let name2 = ([...postDta,response.data.data]);
+  const b = [...postDta, ...response.data.data];
+  setpostDta(b);
+ console.log(response.data.data.length);
+ setshowMore(false);
+
+ }
  
+   
+ }
 
 
   const toPostView = async(id: number)=>{
@@ -166,6 +199,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
           "slug":  values.title
        
       };
+     // console.log(postVal);
        fetch(''+BASE_URL+'/posts', {
             method: 'POST',
             headers: { "Content-Type": "application/json"},
@@ -192,7 +226,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
      
       setTimeout(() => {
           reset();
-          postData();
+          loadmore();
          resolve();
          onClose();
       }, 2000)
@@ -271,14 +305,15 @@ const IndexView = ({ data }: PostJsonResponse) => {
         </div>
         <div style={{textAlign:'center'}}>
        
-          {/*<Button isLoading={showMore}
+          <Button isLoading={showMore}
           variant="outline"
-          style={{backgroundColor:'#cc9900', borderColor: "#cc9900",width:'30%'}}
+          style={{borderColor: "#cc9900",width:'12%',borderRadius:'0'}}
           _hover={{ bg: "#cc9900", borderColor: "#cc9900" }}
-          disabled={false}
+          disabled={disSh}
+          onClick={loadmore}
         >
-         Show More
-         </Button>*/}
+         Load More
+         </Button>
         </div>
     </div>
 
@@ -289,7 +324,20 @@ const IndexView = ({ data }: PostJsonResponse) => {
           <ModalCloseButton />
           <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+          <FormControl isInvalid={errors.message}>
+                <FormLabel style={{fontSize:'14px',fontWeight: '400'}} htmlFor='Title'>Title</FormLabel>
+                <Input
+                  id='title'
+                  placeholder='title'
+                  _placeholder={{ fontSize:'14px', }}
+                  style={{height: '30px',border: '1px solid #ddd'}}
+                  {...register('title', )}
+                />
+                <FormErrorMessage>
+                  {errors.msg && errors.msg.message}
+                </FormErrorMessage>
+              </FormControl>
+          <Grid templateColumns='repeat(2, 1fr)' gap={6} style={{marginTop:'20px'}}>
           <GridItem w='100%' h='20' >
           <FormControl isInvalid={errors.name}>
                 <FormLabel style={{fontSize:'14px',fontWeight: '400',}} htmlFor='name'>Name</FormLabel>
@@ -346,7 +394,8 @@ const IndexView = ({ data }: PostJsonResponse) => {
           </GridItem>
           <GridItem w='100%' h='20' >
           <FormControl isInvalid={errors.vdolink}>
-                <FormLabel style={{fontSize:'14px',fontWeight: '400'}} htmlFor='vdolink'>Video Link</FormLabel>
+                <FormLabel style={{fontSize:'14px',fontWeight: '400'}} htmlFor='vdolink'>
+                  Youtube Link (Please add Video ID ex:<b>w37yQ5kAdIo</b></FormLabel>
                 <Input
                   id='vdolink'
                   placeholder='Video Link'
@@ -367,9 +416,10 @@ const IndexView = ({ data }: PostJsonResponse) => {
                   id='message'
                   placeholder='Message'
                   _placeholder={{ fontSize:'14px', }}
-                  style={{height: '30px',border: '1px solid #ddd'}}
+                  style={{height: '130px',border: '1px solid #ddd'}}
                   {...register('message', {
                     required: 'Message is required' })}
+                  
                 />
                 <FormErrorMessage>
                   {errors.msg && errors.msg.message}
@@ -416,7 +466,7 @@ const IndexView = ({ data }: PostJsonResponse) => {
           <ModalBody>
           <AspectRatio maxW='560px' ratio={1}>
             <iframe
-              src={media}
+              src={'https://www.youtube.com/embed/'+media+''}
               allowFullScreen
             />
           </AspectRatio>

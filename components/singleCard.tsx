@@ -16,7 +16,7 @@ const SingleCard = (props: PostCardProps) => {
         w="100%"
         h='100%'
         mx="auto"
-        style={{fontFamily: 'cursive',
+        style={{fontFamily: 'RRegular',
         position: 'relative' }}
       >
          
